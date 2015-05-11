@@ -1,25 +1,40 @@
 import table
 import basic2d
+import option
+
+type
+  Point* = TPoint2d
+  Heading* = TVector2d
 
 type
   Robot* = object
-    location*: TPoint2d
-    facing*: TVector2d
-    table*: Table
+    location*: Point
+    facing*: Heading
+    table*: Option[TableObj]
 
-proc move*(r: var Robot) =
-  r.location &= move(r.facing)
+proc newRobot*(location: Point, facing: Heading, table: Option[TableObj]): Robot =
+  Robot(location: location, facing: facing, table: table)
+
+proc place*(this: Robot, location: Point, facing: Heading, table: Option[TableObj]): Robot =
+  if isSome(table) and table.get().contains(location):
+    newRobot(location, facing, table)
+  else:
+    this
+
+proc move*(this: Robot): Robot =
+  var location = this.location & move(this.facing)
+  place(this, location, this.facing, this.table)
 
 proc left*(r: var Robot) =
-  rotate90(r.facing)
+  if isSome(r.table):
+    rotate90(r.facing)
 
 proc right*(r: var Robot) =
-  rotate270(r.facing)
+  if isSome(r.table):
+    rotate270(r.facing)
 
-proc place*(r: var Robot) =
-  echo "Place"
-
-proc report*(r: var Robot) =
-  echo "Report"
+proc report*(r: Robot) =
+  if isSome(r.table):
+    echo "Report"
 
 
