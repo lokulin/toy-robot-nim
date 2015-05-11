@@ -1,12 +1,25 @@
+import point
+import table
+
 type
-  Point = tuple[x: float, y: float]
-  Table = tuple[llc: Point, urc: Point]
-  Robot = tuple[location: Point, facing: float, table: Table]
+  Robot* = object
+    location*: Point
+    facing*: float
+    table*: Table
 
-var
-  p1: Point = (x: 0.0, y: 0.0)
-  p2: Point = (x: 4.0, y: 4.0)
-  table: Table = (llc: p1, urc: p2)
-  robot: Robot = (location: p1, facing: 0.0, table: table)
+proc move*(r: var Robot) =
+  echo "Move"
 
-echo robot
+proc left*(r: var Robot) =
+  echo "Left"
+
+proc right*(r: var Robot) =
+  echo "Right"
+
+proc place*(r: var Robot) =
+  echo "Place"
+
+proc report*(r: var Robot) =
+  echo "Report"
+
+
