@@ -1,6 +1,6 @@
-import point
+import basic2d
 
 type
   Table* = object
-    llc*, urc*: Point
+    llc*, urc*: TPoint2d
 

@@ -1,20 +1,20 @@
-import point
 import table
+import basic2d
 
 type
   Robot* = object
-    location*: Point
-    facing*: float
+    location*: TPoint2d
+    facing*: TVector2d
     table*: Table
 
 proc move*(r: var Robot) =
-  echo "Move"
+  r.location &= move(r.facing)
 
 proc left*(r: var Robot) =
-  echo "Left"
+  rotate90(r.facing)
 
 proc right*(r: var Robot) =
-  echo "Right"
+  rotate270(r.facing)
 
 proc place*(r: var Robot) =
   echo "Place"
