@@ -7,7 +7,7 @@ type
     facing: Heading
     table: Option[Table]
 
-proc newRobot*(location: Point, facing: Heading, table: Option[Table] = None[Table]()): Robot =
+proc newRobot*(location: Point, facing: Heading, table: Option[Table] = None(Table)): Robot =
   Robot(location: location, facing: facing, table: table)
 
 proc place*(this: Robot, location: Point, facing: Heading, table: Option[Table]): Robot =

@@ -23,8 +23,4 @@ robot.report()
 proc returnsString[T](x: T): string =
   "yep"
 
-var test: Option[string] =  map(table, returnsString)
-
-echo test.get
-
-#assert 1 == 2
+assert "yep" == table.map(returnsString).get

@@ -1,21 +1,17 @@
-type
-  OptionKind = enum
-    okNone,
-    okSome
-  Option*[T] = ref OptionObj[T]
-  OptionObj[T] = object
-    isDefined: bool
-    case kind: OptionKind
-    of okNone: discard
-    of okSome: x: T
+import typetraits
 
-proc None*[A](): Option[A] =
-  Option[A](kind: okNone)
+type
+  Option*[T] = object
+    isDefined: bool
+    x: T
+
+proc None*(A: typedesc): Option[A] =
+  Option[A]()
 
 proc Some*[A](x: A): Option[A] =
-  Option[A](kind: okSome, x: x, isDefined: true)
+  Option[A](x: x, isDefined: true)
 
-proc empty*[A](): Option[A] = None[A]()
+proc empty*(A: typedesc): Option[A] = None(A)
 
 proc isSome*[A](x: Option[A]): bool =
   x.isDefined
@@ -42,7 +38,7 @@ proc isDefined*[A: Option](this: A): bool =
 
 proc map*[A,B](this: Option[A], f: proc (x: A):B ): Option[B] {.inline.} =
   if (this.isEmpty):
-    None[B]()
+    None(B)
   else:
     Some[B](f(this.get))
 
@@ -54,7 +50,7 @@ proc fold*[A,B](this: Option[A], ifEmpty: proc():B, f: proc (x: A):B): B {.inlin
 
 proc flatMap*[A,B](this: Option[A], f: proc(x: A):Option[B] ): Option[B] {.inline.} =
   if (this.isEmpty):
-    None[B]()
+    None(B)
   else:
     f(this.get)
 
@@ -62,13 +58,13 @@ proc filter*[A](this: Option[A], p: proc(x: A):bool ): Option[A] {.inline.} =
   if (this.isEmpty or p(this.get)):
     this
   else:
-    None[A]()
+    None(A)
 
 proc filterNot*[A](this: Option[A], p: proc(x: A):bool ): Option[A] {.inline.} =
   if (this.isEmpty or not p(this.get)):
     this
   else:
-    None[A]()
+    None(A)
 
 proc contains*[A](this: Option[A], elem: A): bool =
   not this.isEmpty and this.get == elem
