@@ -1,21 +1,16 @@
-import table
-import basic2d
+import space2d
 import option
 
 type
-  Point* = TPoint2d
-  Heading* = TVector2d
-
-type
   Robot* = object
-    location*: Point
-    facing*: Heading
-    table*: Option[TableObj]
+    location: Point
+    facing: Heading
+    table: Option[Table]
 
-proc newRobot*(location: Point, facing: Heading, table: Option[TableObj]): Robot =
+proc newRobot*(location: Point, facing: Heading, table: Option[Table] = None[Table]()): Robot =
   Robot(location: location, facing: facing, table: table)
 
-proc place*(this: Robot, location: Point, facing: Heading, table: Option[TableObj]): Robot =
+proc place*(this: Robot, location: Point, facing: Heading, table: Option[Table]): Robot =
   if isSome(table) and table.get().contains(location):
     newRobot(location, facing, table)
   else:
