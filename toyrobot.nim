@@ -1,26 +1,27 @@
+from strutils import parseFloat, parseEnum
+from re import re, `=~`
+from math import PI
 import space2d
 import robot as robots
-import option
+from option import Some
 
 var
-  p1: Point = newPoint(0.0, 0.0)
-  p2: Point = newPoint(4.0, 4.0)
-  f: Heading = newHeading(0.0, 1.0)
-  table: Option[Table] = Some(newTable(p1, p2))
-  robot: Robot = newRobot(p1, f)
+  table = Some(newTable(newPoint(0.0, 0.0), newPoint(4.0, 4.0)))
+  robot = newRobot()
 
-
-robot.report()
-robot = robot.move()
-robot.left()
-robot.right()
-robot = robot.place(p1, f, table)
-robot = robot.move()
-robot.left()
-robot.right()
-robot.report()
-
-proc returnsString[T](x: T): string =
-  "yep"
-
-assert "yep" == table.map(returnsString).get
+for line in lines stdin:
+  case line
+  of "MOVE": robot.move
+  of "LEFT": robot.left
+  of "RIGHT": robot.right
+  of "REPORT": robot.report
+  else:
+    if line =~ re"^PLACE\s(\d+),(\d+),(NORTH|EAST|SOUTH|WEST)$":
+      try:
+        var
+          x = parseFloat(matches[0])
+          y = parseFloat(matches[1])
+          facing = newHeading(parseEnum(matches[2], NORTH))
+        robot.place(newPoint(x, y), facing, table)
+      except:
+        discard
